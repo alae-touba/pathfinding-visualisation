@@ -10,12 +10,14 @@ Here is a demo of what the app looks like after exploring some nodes and finding
 
 ---
 
-##App url
+## App url
+
 Here is the url for the app: [https://alae-touba.github.io/pathfinding-visualisation/index.html](https://alae-touba.github.io/pathfinding-visualisation/index.html)
 
 ---
 
-##Implemented Algotithms
+## Implemented Algotithms
+
 For this app i implemented 4 well known graph algorithms:
 
 -   _**Depth first search:**_
@@ -37,7 +39,7 @@ For this app i implemented 4 well known graph algorithms:
 
 ---
 
-##Documentation
+## Documentation
 
 -   _**selecting a starting node**_
     click on the "select start" button in the bottom navbar and then click on the grid. (you will see the start node, at the clicked position)
