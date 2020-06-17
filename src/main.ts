@@ -276,11 +276,11 @@ table.addEventListener("click", (e: MouseEvent) => {
 		} else {
 			//if we clicked on a image
 			if (target.tagName === "IMG") {
-				const parentTd = target.parentElement
+				const imgParent = target.parentElement //td
 				// if it is the end node img
-				if (Coords.areEquals(Coords.getCoordsFromStr(parentTd.id), endNodeCoords)) {
-					parentTd.innerHTML = ""
-					parentTd.style.backgroundColor = GRID_BG_COLOR
+				if (Coords.areEquals(Coords.getCoordsFromStr(imgParent.id), endNodeCoords)) {
+					imgParent.innerHTML = ""
+					imgParent.style.backgroundColor = GRID_BG_COLOR
 					isEndNodeSelected = false
 					endNodeCoords = null
 				}
