@@ -21,7 +21,7 @@ I built this app as a fun side project using typescript/html/css in order to 'vi
 Here is a demo of what the app looks like after exploring some nodes and finding a path from a source to a destination:
 
 ![App demo](static/images/app-demo.png)
-<video src='./static/pathfinding-visualisation.mp4' width='600'/>
+
 
 ![App demo](static/app.gif)
 
