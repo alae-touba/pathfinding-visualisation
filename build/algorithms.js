@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,14 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.bellmanFordSearch = exports.dijkstartSearch = exports.bfsSearch = exports.dfsSearch = void 0;
-const utils_1 = require("./utils");
-exports.dfsSearch = (src, dest, graph, withAnimation = true) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!utils_1.Coords.isCoordsInGrid(src, graph.numberOfRows, graph.numberOfColumns)) {
+import { Coords, drawSearchingAnimation, } from "./utils.js";
+export const dfsSearch = (src_1, dest_1, graph_1, ...args_1) => __awaiter(void 0, [src_1, dest_1, graph_1, ...args_1], void 0, function* (src, dest, graph, withAnimation = true) {
+    if (!Coords.isCoordsInGrid(src, graph.numberOfRows, graph.numberOfColumns)) {
         throw new Error("source coordinates are not in the grid");
     }
-    if (!utils_1.Coords.isCoordsInGrid(dest, graph.numberOfRows, graph.numberOfColumns)) {
+    if (!Coords.isCoordsInGrid(dest, graph.numberOfRows, graph.numberOfColumns)) {
         throw new Error("destination coordinates are not in the grid");
     }
     let path = [];
@@ -23,10 +20,10 @@ exports.dfsSearch = (src, dest, graph, withAnimation = true) => __awaiter(void 0
         let currentNode = graph.nodes[current.i][current.j];
         if (currentNode && !currentNode.isVisited && !currentNode.isBlocked) {
             currentNode.isVisited = true;
-            if (!utils_1.Coords.areEquals(current, src) && !utils_1.Coords.areEquals(current, dest) && withAnimation) {
-                yield utils_1.drawSearchingAnimation(currentNode.coords);
+            if (!Coords.areEquals(current, src) && !Coords.areEquals(current, dest) && withAnimation) {
+                yield drawSearchingAnimation(currentNode.coords);
             }
-            if (utils_1.Coords.areEquals(current, dest)) {
+            if (Coords.areEquals(current, dest)) {
                 const destNode = graph.nodes[dest.i][dest.j];
                 let tmp = destNode;
                 while (tmp != null) {
@@ -48,12 +45,12 @@ exports.dfsSearch = (src, dest, graph, withAnimation = true) => __awaiter(void 0
     yield dfsRec(src);
     return path;
 });
-exports.bfsSearch = (src, dest, graph, withAnimation = true) => __awaiter(void 0, void 0, void 0, function* () {
+export const bfsSearch = (src_1, dest_1, graph_1, ...args_1) => __awaiter(void 0, [src_1, dest_1, graph_1, ...args_1], void 0, function* (src, dest, graph, withAnimation = true) {
     console.log("debug>> bfs");
-    if (!utils_1.Coords.isCoordsInGrid(src, graph.numberOfRows, graph.numberOfColumns)) {
+    if (!Coords.isCoordsInGrid(src, graph.numberOfRows, graph.numberOfColumns)) {
         throw new Error("source coordinates are not in the grid");
     }
-    if (!utils_1.Coords.isCoordsInGrid(dest, graph.numberOfRows, graph.numberOfColumns)) {
+    if (!Coords.isCoordsInGrid(dest, graph.numberOfRows, graph.numberOfColumns)) {
         throw new Error("destination coordinates are not in the grid");
     }
     const queue = [];
@@ -64,7 +61,7 @@ exports.bfsSearch = (src, dest, graph, withAnimation = true) => __awaiter(void 0
         const currentNode = queue.shift();
         if (!currentNode.isVisited && !currentNode.isBlocked) {
             currentNode.isVisited = true;
-            if (utils_1.Coords.areEquals(currentNode.coords, dest)) {
+            if (Coords.areEquals(currentNode.coords, dest)) {
                 let tmp = currentNode;
                 while (tmp) {
                     path.unshift(tmp.coords);
@@ -74,8 +71,8 @@ exports.bfsSearch = (src, dest, graph, withAnimation = true) => __awaiter(void 0
             }
             else {
                 //process node
-                if (!utils_1.Coords.areEquals(currentNode.coords, src) && withAnimation) {
-                    yield utils_1.drawSearchingAnimation(currentNode.coords);
+                if (!Coords.areEquals(currentNode.coords, src) && withAnimation) {
+                    yield drawSearchingAnimation(currentNode.coords);
                 }
                 for (let i = 0; i < currentNode.neighbors.length; i++) {
                     const neighbor = currentNode.neighbors[i];
@@ -89,12 +86,12 @@ exports.bfsSearch = (src, dest, graph, withAnimation = true) => __awaiter(void 0
     }
     return path;
 });
-exports.dijkstartSearch = (src, dest, graph, withAnimation = true) => __awaiter(void 0, void 0, void 0, function* () {
+export const dijkstartSearch = (src_1, dest_1, graph_1, ...args_1) => __awaiter(void 0, [src_1, dest_1, graph_1, ...args_1], void 0, function* (src, dest, graph, withAnimation = true) {
     console.log(">>Debug: dikstrta");
-    if (!utils_1.Coords.isCoordsInGrid(src, graph.numberOfRows, graph.numberOfColumns)) {
+    if (!Coords.isCoordsInGrid(src, graph.numberOfRows, graph.numberOfColumns)) {
         throw new Error("source coordinates are not in the grid");
     }
-    if (!utils_1.Coords.isCoordsInGrid(dest, graph.numberOfRows, graph.numberOfColumns)) {
+    if (!Coords.isCoordsInGrid(dest, graph.numberOfRows, graph.numberOfColumns)) {
         throw new Error("destination coordinates are not in the grid");
     }
     let isPathExists = false;
@@ -105,7 +102,7 @@ exports.dijkstartSearch = (src, dest, graph, withAnimation = true) => __awaiter(
     // nodes.filter((n) => !Coords.areEquals(n.coords, src)).forEach((node) => (node.distanceFromStart = Infinity))
     for (let i = 0; i < graph.numberOfRows; i++) {
         for (let j = 0; j < graph.numberOfColumns; j++) {
-            if (!utils_1.Coords.areEquals(src, graph.nodes[i][j].coords))
+            if (!Coords.areEquals(src, graph.nodes[i][j].coords))
                 graph.nodes[i][j].distanceFromStart = Infinity;
         }
     }
@@ -137,10 +134,10 @@ exports.dijkstartSearch = (src, dest, graph, withAnimation = true) => __awaiter(
         }
         currentNode.isVisited = true;
         numberOfUnvisitedNodes--;
-        if (!utils_1.Coords.areEquals(currentNode.coords, src) && !utils_1.Coords.areEquals(currentNode.coords, dest) && withAnimation) {
-            yield utils_1.drawSearchingAnimation(currentNode.coords);
+        if (!Coords.areEquals(currentNode.coords, src) && !Coords.areEquals(currentNode.coords, dest) && withAnimation) {
+            yield drawSearchingAnimation(currentNode.coords);
         }
-        if (utils_1.Coords.areEquals(currentNode.coords, dest)) {
+        if (Coords.areEquals(currentNode.coords, dest)) {
             isPathExists = true;
             break;
         }
@@ -156,19 +153,19 @@ exports.dijkstartSearch = (src, dest, graph, withAnimation = true) => __awaiter(
     }
     return path;
 });
-exports.bellmanFordSearch = (src, dest, graph, withAnimation = true) => __awaiter(void 0, void 0, void 0, function* () {
+export const bellmanFordSearch = (src_1, dest_1, graph_1, ...args_1) => __awaiter(void 0, [src_1, dest_1, graph_1, ...args_1], void 0, function* (src, dest, graph, withAnimation = true) {
     console.log(">>debug: bellman ford");
-    if (!utils_1.Coords.isCoordsInGrid(src, graph.numberOfRows, graph.numberOfColumns)) {
+    if (!Coords.isCoordsInGrid(src, graph.numberOfRows, graph.numberOfColumns)) {
         throw new Error("source coordinates are not in the grid");
     }
-    if (!utils_1.Coords.isCoordsInGrid(dest, graph.numberOfRows, graph.numberOfColumns)) {
+    if (!Coords.isCoordsInGrid(dest, graph.numberOfRows, graph.numberOfColumns)) {
         throw new Error("destination coordinates are not in the grid");
     }
     const startNode = graph.nodes[src.i][src.j];
     startNode.distanceFromStart = 0;
     for (let i = 0; i < graph.numberOfRows; i++) {
         for (let j = 0; j < graph.numberOfColumns; j++) {
-            if (!utils_1.Coords.areEquals(src, graph.nodes[i][j].coords))
+            if (!Coords.areEquals(src, graph.nodes[i][j].coords))
                 graph.nodes[i][j].distanceFromStart = Infinity;
         }
     }
@@ -180,10 +177,10 @@ exports.bellmanFordSearch = (src, dest, graph, withAnimation = true) => __awaite
                 if (!currentNode.isBlocked) {
                     //We will not draw the animation until tha last iteration of process of the algorithm
                     if (k === graph.numberOfRows * graph.numberOfColumns - graph.blockedNodesCoords.length - 1 - 1 &&
-                        !utils_1.Coords.areEquals(currentNode.coords, src) &&
-                        !utils_1.Coords.areEquals(currentNode.coords, dest) &&
+                        !Coords.areEquals(currentNode.coords, src) &&
+                        !Coords.areEquals(currentNode.coords, dest) &&
                         withAnimation) {
-                        yield utils_1.drawSearchingAnimation(currentNode.coords);
+                        yield drawSearchingAnimation(currentNode.coords);
                     }
                     for (let neighbor of currentNode.neighbors) {
                         if (!neighbor.isBlocked) {
@@ -205,7 +202,7 @@ exports.bellmanFordSearch = (src, dest, graph, withAnimation = true) => __awaite
         path.unshift(tmp.coords);
         tmp = tmp.parent;
     }
-    if (!utils_1.Coords.areEquals(path[0], src) || !utils_1.Coords.areEquals(path[path.length - 1], dest))
+    if (!Coords.areEquals(path[0], src) || !Coords.areEquals(path[path.length - 1], dest))
         path = []; //no path
     return path;
 });

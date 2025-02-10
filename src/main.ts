@@ -13,9 +13,9 @@ import {
 	START_CELL_BG_COLOR,
 	END_CELL_BG_COLOR,
 	BLOCKED_CELLS_BG_COLOR,
-} from "./utils"
+} from "./utils.js"
 
-import { dfsSearch, bfsSearch, dijkstartSearch, bellmanFordSearch } from "./algorithms"
+import { dfsSearch, bfsSearch, dijkstartSearch, bellmanFordSearch } from "./algorithms.js"
 
 let firstTimeVisualization = true
 

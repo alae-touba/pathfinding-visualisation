@@ -67,3 +67,31 @@ For this app i implemented 4 well known graph algorithms:
     If there is a path, it will be shown with an orange color.
 
 -   _**I will let you explore the other two options yourselves.**_
+-   
+
+
+# use it locally
+
+1. clone the repo
+
+2. make sure to have Node, npm & TypeScript installed
+    ```bash
+    npm install -g typescript
+    ```
+3. compile ts files to js files
+    ```bash
+    tsc
+    ```
+4. open index.html in the browser (i use __Live Server__ VSCode extension to launch index.html)
+
+
+The vesions i have:
+```bash
+PS C:\Users\NCDD0815\work\github\pathfinding-visualisation> tsc -v            
+Version 5.7.3
+PS C:\Users\NCDD0815\work\github\pathfinding-visualisation> node -v           
+v18.19.0
+PS C:\Users\NCDD0815\work\github\pathfinding-visualisation> npm -v            
+10.2.3
+```
+

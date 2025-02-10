@@ -10,7 +10,7 @@ import {
 	PATH_CELLS_BG_COLOR,
 	START_CELL_BG_COLOR,
 	END_CELL_BG_COLOR,
-} from "./utils"
+} from "./utils.js"
 
 export const dfsSearch = async (src: Coords, dest: Coords, graph: Graph, withAnimation = true): Promise<Coords[]> => {
 	if (!Coords.isCoordsInGrid(src, graph.numberOfRows, graph.numberOfColumns)) {

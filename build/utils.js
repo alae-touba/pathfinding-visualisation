@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,17 +7,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.drawSearchingAnimation = exports.sleep = exports.Graph = exports.Node = exports.Coords = exports.BLOCKED_CELLS_BG_COLOR = exports.END_CELL_BG_COLOR = exports.START_CELL_BG_COLOR = exports.PATH_CELLS_BG_COLOR = exports.SEARCHING_BG_COLOR = exports.GRID_BG_COLOR = exports.CELLS_BORDER_COLOR = void 0;
 //html td elements border color
-exports.CELLS_BORDER_COLOR = "rgb(162, 182, 180)"; //#a2b6b4
-exports.GRID_BG_COLOR = "rgb(233, 236, 239)"; //"#e9ecef"
-exports.SEARCHING_BG_COLOR = "rgb(9, 40, 71)"; //#092847
-exports.PATH_CELLS_BG_COLOR = "orange";
-exports.START_CELL_BG_COLOR = "blue";
-exports.END_CELL_BG_COLOR = "green";
-exports.BLOCKED_CELLS_BG_COLOR = "red";
-class Coords {
+export const CELLS_BORDER_COLOR = "rgb(162, 182, 180)"; //#a2b6b4
+export const GRID_BG_COLOR = "rgb(233, 236, 239)"; //"#e9ecef"
+export const SEARCHING_BG_COLOR = "rgb(9, 40, 71)"; //#092847
+export const PATH_CELLS_BG_COLOR = "orange";
+export const START_CELL_BG_COLOR = "blue";
+export const END_CELL_BG_COLOR = "green";
+export const BLOCKED_CELLS_BG_COLOR = "red";
+export class Coords {
     constructor(i, j) {
         this.i = i;
         this.j = j;
@@ -37,8 +34,7 @@ class Coords {
         return coords.i >= 0 && coords.i < gridNumRows && coords.j >= 0 && coords.j < gridNumColumns;
     }
 }
-exports.Coords = Coords;
-class Node {
+export class Node {
     constructor(i, j) {
         // this.coords = { i, j };
         this.coords = new Coords(i, j);
@@ -48,8 +44,7 @@ class Node {
         this.isBlocked = false;
     }
 }
-exports.Node = Node;
-class Graph {
+export class Graph {
     constructor(numberOfRows, numberOfColumns) {
         this.numberOfRows = null;
         this.numberOfColumns = null;
@@ -86,19 +81,17 @@ class Graph {
         }
     }
 }
-exports.Graph = Graph;
 Graph.directions = [
     [-1, 0],
     [0, 1],
     [1, 0],
     [0, -1],
 ];
-function sleep(ms) {
+export function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
-exports.sleep = sleep;
-exports.drawSearchingAnimation = (coords) => __awaiter(void 0, void 0, void 0, function* () {
+export const drawSearchingAnimation = (coords) => __awaiter(void 0, void 0, void 0, function* () {
     const cell = document.getElementById(Coords.getStrFromCoords(coords));
-    cell.style.backgroundColor = exports.SEARCHING_BG_COLOR;
+    cell.style.backgroundColor = SEARCHING_BG_COLOR;
     yield sleep(30);
 });
