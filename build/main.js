@@ -91,6 +91,7 @@ const launchBootsrapModal = (message) => {
     $("#exampleModal").modal("show");
 };
 const visualize = (...args_1) => __awaiter(void 0, [...args_1], void 0, function* (withAnimation = true) {
+    console.log("visualizing...");
     if (algorithm === "") {
         console.log("you did not choose any algorithme");
         launchBootsrapModal("you did not choose any algorithm!");

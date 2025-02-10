@@ -1,0 +1,17 @@
+{
+  "name": "pathfinding-visualisation",
+  "version": "1.0.0",
+  "description": "Pathfinding algorithm visualization",
+  "author": "Alae touba",
+  "license": "ISC",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@types/jquery": "^3.3.38"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

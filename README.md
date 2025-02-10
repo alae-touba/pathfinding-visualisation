@@ -1,9 +1,13 @@
 # Table of content
 
--   **[About](#about)**
--   **[App Url](#app-url)**
--   **[Implemented Algorithms](#implemented-algorithms)**
--   **[How To Use It](#how-to-use-it)**
+- [Table of content](#table-of-content)
+- [About](#about)
+- [App Url](#app-url)
+- [Implemented Algorithms](#implemented-algorithms)
+- [How To Use It](#how-to-use-it)
+- [use it locally](#use-it-locally)
+  - [Prerequisites](#prerequisites)
+
 
 <a name="about"></a>
 
@@ -72,26 +76,26 @@ For this app i implemented 4 well known graph algorithms:
 
 # use it locally
 
+## Prerequisites
+
+- Node.js (v18.x or later)
+- npm (v10.x or later)
+- VS Code with Live Server extension (recommended)
+
+## install & run
 1. clone the repo
 
-2. make sure to have Node, npm & TypeScript installed
-    ```bash
-    npm install -g typescript
-    ```
-3. compile ts files to js files
-    ```bash
-    tsc
-    ```
-4. open index.html in the browser (i use __Live Server__ VSCode extension to launch index.html)
-
-
-The vesions i have:
+2. Install dependencies
 ```bash
-PS C:\Users\NCDD0815\work\github\pathfinding-visualisation> tsc -v            
-Version 5.7.3
-PS C:\Users\NCDD0815\work\github\pathfinding-visualisation> node -v           
-v18.19.0
-PS C:\Users\NCDD0815\work\github\pathfinding-visualisation> npm -v            
-10.2.3
+npm install
 ```
+
+3. Build the project
+```bash
+npm run build
+```
+
+4. open _index.html_ in the browser (i use __Live Server__ VSCode extension to launch index.html)
+
+
 

@@ -122,6 +122,7 @@ const launchBootsrapModal = (message: string) => {
 }
 
 const visualize = async (withAnimation = true) => {
+	console.log("visualizing...")
 	if (algorithm === "") {
 		console.log("you did not choose any algorithme")
 		launchBootsrapModal("you did not choose any algorithm!")
