@@ -13,6 +13,7 @@ import {
 } from "./utils.js"
 
 export const dfsSearch = async (src: Coords, dest: Coords, graph: Graph, withAnimation = true): Promise<Coords[]> => {
+	console.log('for debug....')
 	if (!Coords.isCoordsInGrid(src, graph.numberOfRows, graph.numberOfColumns)) {
 		throw new Error("source coordinates are not in the grid")
 	}
