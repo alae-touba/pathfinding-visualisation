@@ -85,22 +85,42 @@ For this app i implemented 4 well known graph algorithms:
 
 - Node.js (v18.x or later)
 - npm (v10.x or later)
-- VS Code with Live Server extension (recommended)
+- VS Code with Live Server extension (recommended for development)
 
 ## install & run
-1. clone the repo
 
-2. Install dependencies
-```bash
-npm install
-```
+To run the project locally, follow these steps:
 
-3. Build the project
-```bash
-npm run build
-```
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/alae-touba/pathfinding-visualisation.git
+    cd pathfinding-visualisation
+    ```
 
-4. open _index.html_ in the browser (i use __Live Server__ VSCode extension to launch index.html)
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Build the project:**
+    ```bash
+    npm run build
+    ```
+    This compiles the TypeScript files from `src/` into JavaScript in the `build/` directory.
+
+4.  **Open in browser:**
+    Open the `index.html` file in your web browser to see the application.
+
+### Development (Watch Mode)
+
+For a better development experience, you can use the watch script to automatically recompile the project when you make changes to the source files.
+
+1.  **Run the watch script:**
+    ```bash
+    npm run watch
+    ```
+2.  **Open with Live Server:**
+    While the watch script is running, it's recommended to use an extension like [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) for VS Code. Right-click on `index.html` and select "Open with Live Server". This will open the application in your browser and automatically reload the page whenever the code is recompiled.
 
 
 
