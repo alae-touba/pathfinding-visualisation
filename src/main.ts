@@ -97,6 +97,7 @@ let isBtnSelectEndSelected = false
 let isBtnSelectBlockedSelected = false
 
 btnSelectStart.addEventListener("click", (e) => {
+	console.log("selecting start node")
 	isBtnSelectStartSelected = true
 	isBtnSelectEndSelected = false
 	isBtnSelectBlockedSelected = false
@@ -118,7 +119,7 @@ const warningMessag = document.getElementById("warning-message")
 
 const launchBootsrapModal = (message: string) => {
 	warningMessag.textContent = message
-	;($("#exampleModal") as any).modal("show")
+	;($('#exampleModal') as any).modal("show")
 }
 
 const visualize = async (withAnimation = true) => {
@@ -356,3 +357,13 @@ table.addEventListener("mouseover", (e) => {
 		}
 	}
 })
+
+// Theme toggle functionality
+const themeToggle = document.getElementById('theme-toggle');
+themeToggle.addEventListener('click', () => {
+	const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', newTheme);
+    themeToggle.innerHTML = `<i class="fas fa-${newTheme === 'light' ? 'moon' : 'sun'}"></i>`;
+});

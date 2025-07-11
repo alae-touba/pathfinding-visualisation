@@ -1,90 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Pathfinding visualisation</title>
-		<script>
-			const exports = { __esModule: true }
-		</script>
-		<link href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/slate/bootstrap.min.css" rel="stylesheet" />
-		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Pathfinding Visualizer</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 		<script type="module" src="build/main.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+		<link rel="stylesheet" href="static/styles.css">
 	</head>
-	<body style="margin: 20px;">
-		<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-bottom">
-			<div class="container">
-				<div class="row mx-auto">
-					<div class="col-md-12">
-						<div class="collapse navbar-collapse" id="navbarColor01">
-							<ul class="navbar-nav mr-auto">
-								<li class="nav-item dropup">
-									<a
-										class="nav-link dropdown-toggle"
-										href="#"
-										id="navbarDropdown"
-										role="button"
-										data-toggle="dropdown"
-										aria-haspopup="true"
-										aria-expanded="false"
-									>
-										select an algorithm
-									</a>
-									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-										<a class="dropdown-item" href="#" id="btn-select-dijkstrat">Dijkstrat</a>
-										<a class="dropdown-item" href="#" id="btn-select-bfs">Breath First Search</a>
-										<a class="dropdown-item" href="#" id="btn-select-dfs">Depth First Search</a>
-										<a class="dropdown-item" href="#" id="btn-select-bellman-ford">Bellman Ford</a>
-
-										<!-- <div class="dropdown-divider"></div> -->
-									</div>
-								</li>
-								<li class="nav-item">
-									<!-- <p class="pl-4 pr-4 text-info">select strat</p> -->
-									<a class="nav-link pl-4 pr-4 text-info" href="#" id="btn-select-start">select start</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link pl-4 pr-4 text-success" href="#" id="btn-select-end">select end</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link pl-4 pr-4 text-danger" href="#" id="btn-select-blocked">select blocked</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link pl-4 pr-4" href="#" id="btn-clear-grid">clear grid</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link pl-4 pr-4 text-warning" href="#" id="btn-see-path-only">path only</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link pl-4 pr-4" href="#" id="btn-visualize" style="background-color: #092847; color: white;"
-										>visualize <span id="chosen-algorithm"></span>
-									</a>
-								</li>
-							</ul>
-						</div>
+	
+	<body class="min-h-screen flex flex-col">
+		<header class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-6 shadow-lg">
+			<div class="container mx-auto px-4 flex items-center justify-between">
+				<div class="flex items-center gap-3">
+					<i class="fas fa-route fa-lg animate-slide-in"></i>
+					<div>
+						<h1 class="text-2xl md:text-3xl font-bold animate-slide-in">Pathfinding Visualizer</h1>
+						<p class="text-sm opacity-80 animate-slide-in" style="animation-delay: 0.2s;">Explore graph traversal algorithms interactively</p>
 					</div>
 				</div>
+				<button id="theme-toggle" class="btn-common text-white p-2 rounded-full hover:bg-blue-700">
+					<i class="fas fa-moon"></i>
+				</button>
 			</div>
-		</nav>
-		<div class="container-fluid">
-			<table class="table table-bordered" style="width: 100%;"></table>
-		</div>
+		</header>
+
+		<main class="container mx-auto px-4 py-8 flex-grow">
+			<div class="flex flex-col md:flex-row gap-6">
+				<!-- Controls Section -->
+				<div class="w-full md:w-1/4 card rounded-lg shadow-md p-6">
+					<h2 class="text-xl font-semibold mb-4">Controls</h2>
+					<div class="mb-4">
+						<label class="block text-sm font-medium mb-2">Select Algorithm</label>
+						<div class="space-y-2">
+							<button id="btn-select-dijkstrat" class="w-full btn-algorithm btn-common py-2 px-4 rounded"><i class="fas fa-route"></i> Dijkstra</button>
+							<button id="btn-select-bfs" class="w-full btn-algorithm btn-common py-2 px-4 rounded"><i class="fas fa-sitemap"></i> Breadth First Search</button>
+							<button id="btn-select-dfs" class="w-full btn-algorithm btn-common py-2 px-4 rounded"><i class="fas fa-code-branch"></i> Depth First Search</button>
+							<button id="btn-select-bellman-ford" class="w-full btn-algorithm btn-common py-2 px-4 rounded"><i class="fas fa-project-diagram"></i> Bellman Ford</button>
+						</div>
+						<p class="mt-2 text-sm">Chosen: <span id="chosen-algorithm" class="font-medium">None</span></p>
+					</div>
+					<div class="space-y-2">
+						<button id="btn-select-start" class="w-full btn-start btn-common py-2 px-4 rounded"><i class="fas fa-play"></i> Select Start</button>
+						<button id="btn-select-end" class="w-full btn-end btn-common py-2 px-4 rounded"><i class="fas fa-flag-checkered"></i> Select End</button>
+						<button id="btn-select-blocked" class="w-full btn-blocked btn-common py-2 px-4 rounded"><i class="fas fa-ban"></i> Select Blocked</button>
+						<button id="btn-clear-grid" class="w-full btn-clear btn-common py-2 px-4 rounded"><i class="fas fa-eraser"></i> Clear Grid</button>
+						<button id="btn-see-path-only" class="w-full btn-path btn-common py-2 px-4 rounded"><i class="fas fa-path"></i> Path Only</button>
+						<button id="btn-visualize" class="w-full btn-visualize btn-common py-2 px-4 rounded font-semibold"><i class="fas fa-eye"></i> Visualize</button>
+					</div>
+				</div>
+
+				<!-- Grid Section -->
+				<div class="w-full md:w-3/4 card rounded-lg shadow-md p-6">
+					<h2 class="text-xl font-semibold mb-4">Grid</h2>
+					<table></table>
+				</div>
+			</div>
+		</main>
 
 		<!-- Modal -->
-		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog" role="document">
+		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
 				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
 					<div class="modal-body">
-						<span id="warning-message"></span>
+						<p id="warning-message"></p>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 					</div>
 				</div>
 			</div>
 		</div>
+
+		<footer class="bg-gray-800 text-white py-4 mt-auto">
+			<div class="container mx-auto px-4 text-center">
+				<p class="text-sm"></p>
+			</div>
+		</footer>
 	</body>
 </html>
