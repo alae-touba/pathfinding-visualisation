@@ -15,7 +15,7 @@ import {
 	BLOCKED_CELLS_BG_COLOR,
 } from "./utils.js"
 
-import { dfsSearch, bfsSearch, dijkstartSearch, bellmanFordSearch } from "./algorithms.js"
+import { dfsSearch, bfsSearch, dijkstraSearch, bellmanFordSearch } from "./algorithms.js"
 
 let firstTimeVisualization = true
 
@@ -67,13 +67,13 @@ const updateAlgoName = (algoName: string) => {
 }
 const chosenAlgorithm = document.getElementById("chosen-algorithm")
 
-const btnSelectDijkstrat = document.getElementById("btn-select-dijkstrat")
+const btnSelectDijkstra = document.getElementById("btn-select-dijkstra")
 const btnSelectBfs = document.getElementById("btn-select-bfs")
 const btnSelectDfs = document.getElementById("btn-select-dfs")
 const btnSelectBellmanFord = document.getElementById("btn-select-bellman-ford")
 
-btnSelectDijkstrat.addEventListener("click", (e) => {
-	algorithm = "dijkstrat"
+btnSelectDijkstra.addEventListener("click", (e) => {
+	algorithm = "dijkstra"
 	updateAlgoName(algorithm)
 })
 
@@ -151,8 +151,8 @@ const visualize = async (withAnimation = true) => {
 
 		let path: Coords[] = null
 
-		if (algorithm === "dijkstrat") {
-			path = await dijkstartSearch(startNodeCoords, endNodeCoords, graph, withAnimation)
+		if (algorithm === "dijkstra") {
+			path = await dijkstraSearch(startNodeCoords, endNodeCoords, graph, withAnimation)
 		} else if (algorithm === "bellman-ford") {
 			path = await bellmanFordSearch(startNodeCoords, endNodeCoords, graph, withAnimation)
 		} else if (algorithm === "bfs") {

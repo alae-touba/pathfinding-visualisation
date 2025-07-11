@@ -10,17 +10,13 @@ import {
 	PATH_CELLS_BG_COLOR,
 	START_CELL_BG_COLOR,
 	END_CELL_BG_COLOR,
+    validateCoords,
 } from "./utils.js"
 
 export const dfsSearch = async (src: Coords, dest: Coords, graph: Graph, withAnimation = true): Promise<Coords[]> => {
 	console.log('for debug....')
-	if (!Coords.isCoordsInGrid(src, graph.numberOfRows, graph.numberOfColumns)) {
-		throw new Error("source coordinates are not in the grid")
-	}
-
-	if (!Coords.isCoordsInGrid(dest, graph.numberOfRows, graph.numberOfColumns)) {
-		throw new Error("destination coordinates are not in the grid")
-	}
+	validateCoords(src, graph.numberOfRows, graph.numberOfColumns)
+	validateCoords(dest, graph.numberOfRows, graph.numberOfColumns)
 
 	let path: Coords[] = []
 
@@ -62,13 +58,8 @@ export const dfsSearch = async (src: Coords, dest: Coords, graph: Graph, withAni
 export const bfsSearch = async (src: Coords, dest: Coords, graph: Graph, withAnimation = true): Promise<Coords[]> => {
 	console.log("debug>> bfs")
 
-	if (!Coords.isCoordsInGrid(src, graph.numberOfRows, graph.numberOfColumns)) {
-		throw new Error("source coordinates are not in the grid")
-	}
-
-	if (!Coords.isCoordsInGrid(dest, graph.numberOfRows, graph.numberOfColumns)) {
-		throw new Error("destination coordinates are not in the grid")
-	}
+	validateCoords(src, graph.numberOfRows, graph.numberOfColumns)
+	validateCoords(dest, graph.numberOfRows, graph.numberOfColumns)
 
 	const queue: Node[] = []
 	const startNode = graph.nodes[src.i][src.j]
@@ -110,16 +101,11 @@ export const bfsSearch = async (src: Coords, dest: Coords, graph: Graph, withAni
 	return path
 }
 
-export const dijkstartSearch = async (src: Coords, dest: Coords, graph: Graph, withAnimation = true): Promise<Coords[]> => {
+export const dijkstraSearch = async (src: Coords, dest: Coords, graph: Graph, withAnimation = true): Promise<Coords[]> => {
 	console.log(">>Debug: dikstrta")
 
-	if (!Coords.isCoordsInGrid(src, graph.numberOfRows, graph.numberOfColumns)) {
-		throw new Error("source coordinates are not in the grid")
-	}
-
-	if (!Coords.isCoordsInGrid(dest, graph.numberOfRows, graph.numberOfColumns)) {
-		throw new Error("destination coordinates are not in the grid")
-	}
+	validateCoords(src, graph.numberOfRows, graph.numberOfColumns)
+	validateCoords(dest, graph.numberOfRows, graph.numberOfColumns)
 
 	let isPathExists = false
 
@@ -192,13 +178,8 @@ export const dijkstartSearch = async (src: Coords, dest: Coords, graph: Graph, w
 export const bellmanFordSearch = async (src: Coords, dest: Coords, graph: Graph, withAnimation = true): Promise<Coords[]> => {
 	console.log(">>debug: bellman ford")
 
-	if (!Coords.isCoordsInGrid(src, graph.numberOfRows, graph.numberOfColumns)) {
-		throw new Error("source coordinates are not in the grid")
-	}
-
-	if (!Coords.isCoordsInGrid(dest, graph.numberOfRows, graph.numberOfColumns)) {
-		throw new Error("destination coordinates are not in the grid")
-	}
+	validateCoords(src, graph.numberOfRows, graph.numberOfColumns)
+	validateCoords(dest, graph.numberOfRows, graph.numberOfColumns)
 
 	const startNode = graph.nodes[src.i][src.j]
 	startNode.distanceFromStart = 0

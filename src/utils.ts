@@ -112,3 +112,12 @@ export const drawSearchingAnimation = async (coords: Coords) => {
 	cell.style.backgroundColor = SEARCHING_BG_COLOR
 	await sleep(30)
 }
+
+/**
+ * Throws an error if the given coordinates are outside the grid boundaries.
+ */
+export const validateCoords = (coords: Coords, gridNumRows: number, gridNumColumns: number) => {
+    if (!Coords.isCoordsInGrid(coords, gridNumRows, gridNumColumns)) {
+        throw new Error("Coordinates are not in the grid");
+    }
+}
