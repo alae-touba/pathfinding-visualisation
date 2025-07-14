@@ -123,6 +123,13 @@ const launchBootsrapModal = (message: string) => {
 	;($('#exampleModal') as any).modal("show")
 }
 
+const searchFunctionMap = {
+	[Algorithm.Dijkstra]: dijkstraSearch,
+	[Algorithm.BellmanFord]: bellmanFordSearch,
+	[Algorithm.Bfs]: bfsSearch,
+	[Algorithm.Dfs]: dfsSearch,
+};
+
 const visualize = async (withAnimation = true) => {
 	
 	if (algorithm === Algorithm.None) {
@@ -152,14 +159,9 @@ const visualize = async (withAnimation = true) => {
 
 		let path: Coords[] = null
 
-		if (algorithm === Algorithm.Dijkstra) {
-			path = await dijkstraSearch(startNodeCoords, endNodeCoords, graph, withAnimation)
-		} else if (algorithm === Algorithm.BellmanFord) {
-			path = await bellmanFordSearch(startNodeCoords, endNodeCoords, graph, withAnimation)
-		} else if (algorithm === Algorithm.Bfs) {
-			path = await bfsSearch(startNodeCoords, endNodeCoords, graph, withAnimation)
-		} else if (algorithm === Algorithm.Dfs) {
-			path = await dfsSearch(startNodeCoords, endNodeCoords, graph, withAnimation)
+		const searchFunction = searchFunctionMap[algorithm];
+		if (searchFunction) {
+			path = await searchFunction(startNodeCoords, endNodeCoords, graph, withAnimation);
 		}
 
 		
