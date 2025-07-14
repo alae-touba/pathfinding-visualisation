@@ -126,6 +126,14 @@ export const reconstructPath = (endNode: Node): Coords[] => {
     return path;
 }
 
+export enum Algorithm {
+    Dijkstra = "dijkstra",
+    Bfs = "bfs",
+    Dfs = "dfs",
+    BellmanFord = "bellman-ford",
+    None = ""
+}
+
 /**
  * Throws an error if the given coordinates are outside the grid boundaries.
  */

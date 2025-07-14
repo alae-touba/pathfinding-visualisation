@@ -13,6 +13,7 @@ import {
 	START_CELL_BG_COLOR,
 	END_CELL_BG_COLOR,
 	BLOCKED_CELLS_BG_COLOR,
+	Algorithm,
 } from "./utils.js"
 
 import { dfsSearch, bfsSearch, dijkstraSearch, bellmanFordSearch } from "./algorithms.js"
@@ -22,7 +23,7 @@ let firstTimeVisualization = true
 const GRID_NUM_ROWS = 25
 const GRID_NUM_COLUMNS = 50
 
-let algorithm: string = ""
+let algorithm: Algorithm = Algorithm.None
 let graph = new Graph(GRID_NUM_ROWS, GRID_NUM_COLUMNS)
 
 let isStartNodeSelected = false //is the start node selected? we know it?
@@ -73,22 +74,22 @@ const btnSelectDfs = document.getElementById("btn-select-dfs")
 const btnSelectBellmanFord = document.getElementById("btn-select-bellman-ford")
 
 btnSelectDijkstra.addEventListener("click", (e) => {
-	algorithm = "dijkstra"
+	algorithm = Algorithm.Dijkstra
 	updateAlgoName(algorithm)
 })
 
 btnSelectBfs.addEventListener("click", (e) => {
-	algorithm = "bfs"
+	algorithm = Algorithm.Bfs
 	updateAlgoName(algorithm)
 })
 
 btnSelectDfs.addEventListener("click", (e) => {
-	algorithm = "dfs"
+	algorithm = Algorithm.Dfs
 	updateAlgoName(algorithm)
 })
 
 btnSelectBellmanFord.addEventListener("click", (e) => {
-	algorithm = "bellman-ford"
+	algorithm = Algorithm.BellmanFord
 	updateAlgoName(algorithm)
 })
 
@@ -124,7 +125,7 @@ const launchBootsrapModal = (message: string) => {
 
 const visualize = async (withAnimation = true) => {
 	
-	if (algorithm === "") {
+	if (algorithm === Algorithm.None) {
 		
 		launchBootsrapModal("you did not choose any algorithm!")
 	} else if (!isStartNodeSelected || !isEndNodeSelected) {
@@ -151,13 +152,13 @@ const visualize = async (withAnimation = true) => {
 
 		let path: Coords[] = null
 
-		if (algorithm === "dijkstra") {
+		if (algorithm === Algorithm.Dijkstra) {
 			path = await dijkstraSearch(startNodeCoords, endNodeCoords, graph, withAnimation)
-		} else if (algorithm === "bellman-ford") {
+		} else if (algorithm === Algorithm.BellmanFord) {
 			path = await bellmanFordSearch(startNodeCoords, endNodeCoords, graph, withAnimation)
-		} else if (algorithm === "bfs") {
+		} else if (algorithm === Algorithm.Bfs) {
 			path = await bfsSearch(startNodeCoords, endNodeCoords, graph, withAnimation)
-		} else if (algorithm === "dfs") {
+		} else if (algorithm === Algorithm.Dfs) {
 			path = await dfsSearch(startNodeCoords, endNodeCoords, graph, withAnimation)
 		}
 
