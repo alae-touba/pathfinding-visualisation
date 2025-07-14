@@ -71,29 +71,29 @@ td {
 }
 /* Start button */
 .btn-start {
-    background: linear-gradient(135deg, #10b981, #34d399) !important;
+    background: linear-gradient(135deg, #6b7280, #9ca3af) !important;
     color: white !important;
 }
 .btn-start:hover {
-    background: linear-gradient(135deg, #059669, #10b981) !important;
+    background: linear-gradient(135deg, #4b5563, #6b7280) !important;
     color: white !important;
 }
 /* End button */
 .btn-end {
-    background: linear-gradient(135deg, #ef4444, #f87171) !important;
+    background: linear-gradient(135deg, #10b981, #34d399) !important;
     color: white !important;
 }
 .btn-end:hover {
-    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    background: linear-gradient(135deg, #059669, #10b981) !important;
     color: white !important;
 }
 /* Blocked button */
 .btn-blocked {
-    background: linear-gradient(135deg, #6b7280, #9ca3af) !important;
+    background: linear-gradient(135deg, #ef4444, #f87171) !important;
     color: white !important;
 }
 .btn-blocked:hover {
-    background: linear-gradient(135deg, #4b5563, #6b7280) !important;
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
     color: white !important;
 }
 /* Clear Grid button */

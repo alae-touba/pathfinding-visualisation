@@ -97,7 +97,7 @@ let isBtnSelectEndSelected = false
 let isBtnSelectBlockedSelected = false
 
 btnSelectStart.addEventListener("click", (e) => {
-	console.log("selecting start node")
+	
 	isBtnSelectStartSelected = true
 	isBtnSelectEndSelected = false
 	isBtnSelectBlockedSelected = false
@@ -123,12 +123,12 @@ const launchBootsrapModal = (message: string) => {
 }
 
 const visualize = async (withAnimation = true) => {
-	console.log("visualizing...")
+	
 	if (algorithm === "") {
-		console.log("you did not choose any algorithme")
+		
 		launchBootsrapModal("you did not choose any algorithm!")
 	} else if (!isStartNodeSelected || !isEndNodeSelected) {
-		console.log("youd did not choose start/end nodes")
+		
 		if (!isStartNodeSelected && !isEndNodeSelected) {
 			launchBootsrapModal("you did not select start and end nodes! both!")
 		} else if (!isStartNodeSelected) {
@@ -137,7 +137,7 @@ const visualize = async (withAnimation = true) => {
 			launchBootsrapModal("you did not select the end node")
 		}
 	} else {
-		console.log("before")
+		
 
 		if (!firstTimeVisualization) {
 			for (let i = 0; i < graph.numberOfRows; i++) {
@@ -161,10 +161,10 @@ const visualize = async (withAnimation = true) => {
 			path = await dfsSearch(startNodeCoords, endNodeCoords, graph, withAnimation)
 		}
 
-		console.log("after")
+		
 
 		if (path.length === 0) {
-			console.log("cannot go to destination, no path")
+			
 			alert("cannot go to dest, no path")
 		} else {
 			const sleepTime = withAnimation ? 50 : 0
@@ -175,7 +175,7 @@ const visualize = async (withAnimation = true) => {
 				await sleep(sleepTime)
 			}
 		}
-		console.log("> path", path)
+		
 
 		firstTimeVisualization = false
 		graph.initGraph()
@@ -320,7 +320,7 @@ table.addEventListener("click", (e: MouseEvent) => {
 			isBtnSelectBlockedSelected = false
 		}
 	} else {
-		console.log("rak mamselectioni walo")
+		
 	}
 })
 
@@ -328,7 +328,7 @@ table.addEventListener("mouseover", (e) => {
 	const target = e.target as HTMLElement
 
 	if (selectingBlocked) {
-		console.log(target.tagName)
+		
 
 		if (
 			target.tagName !== "IMG" &&

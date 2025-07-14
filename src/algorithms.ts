@@ -10,11 +10,12 @@ import {
 	PATH_CELLS_BG_COLOR,
 	START_CELL_BG_COLOR,
 	END_CELL_BG_COLOR,
-    validateCoords,
-} from "./utils.js"
+	reconstructPath,
+	validateCoords
+} from './utils.js';
 
 export const dfsSearch = async (src: Coords, dest: Coords, graph: Graph, withAnimation = true): Promise<Coords[]> => {
-	console.log('for debug....')
+	
 	validateCoords(src, graph.numberOfRows, graph.numberOfColumns)
 	validateCoords(dest, graph.numberOfRows, graph.numberOfColumns)
 
@@ -31,14 +32,7 @@ export const dfsSearch = async (src: Coords, dest: Coords, graph: Graph, withAni
 			}
 
 			if (Coords.areEquals(current, dest)) {
-				const destNode = graph.nodes[dest.i][dest.j]
-
-				let tmp = destNode
-				while (tmp != null) {
-					path.unshift(tmp.coords)
-					tmp = tmp.parent
-				}
-				return
+				return reconstructPath(graph.nodes[dest.i][dest.j])
 			} else {
 				for (let neighbor of currentNode.neighbors) {
 					if (!neighbor.isVisited && !neighbor.isBlocked) {
@@ -56,7 +50,7 @@ export const dfsSearch = async (src: Coords, dest: Coords, graph: Graph, withAni
 }
 
 export const bfsSearch = async (src: Coords, dest: Coords, graph: Graph, withAnimation = true): Promise<Coords[]> => {
-	console.log("debug>> bfs")
+	
 
 	validateCoords(src, graph.numberOfRows, graph.numberOfColumns)
 	validateCoords(dest, graph.numberOfRows, graph.numberOfColumns)
@@ -74,13 +68,7 @@ export const bfsSearch = async (src: Coords, dest: Coords, graph: Graph, withAni
 			currentNode.isVisited = true
 
 			if (Coords.areEquals(currentNode.coords, dest)) {
-				let tmp = currentNode
-				while (tmp) {
-					path.unshift(tmp.coords)
-					tmp = tmp.parent
-				}
-
-				return path
+				return reconstructPath(currentNode)
 			} else {
 				//process node
 				if (!Coords.areEquals(currentNode.coords, src) && withAnimation) {
@@ -102,7 +90,7 @@ export const bfsSearch = async (src: Coords, dest: Coords, graph: Graph, withAni
 }
 
 export const dijkstraSearch = async (src: Coords, dest: Coords, graph: Graph, withAnimation = true): Promise<Coords[]> => {
-	console.log(">>Debug: dikstrta")
+	
 
 	validateCoords(src, graph.numberOfRows, graph.numberOfColumns)
 	validateCoords(dest, graph.numberOfRows, graph.numberOfColumns)
@@ -165,18 +153,13 @@ export const dijkstraSearch = async (src: Coords, dest: Coords, graph: Graph, wi
 	let path: Coords[] = []
 
 	if (isPathExists) {
-		const endNode = graph.nodes[dest.i][dest.j]
-		let tmp = endNode
-		while (tmp) {
-			path.unshift(tmp.coords)
-			tmp = tmp.parent
-		}
+		return reconstructPath(graph.nodes[dest.i][dest.j])
 	}
-	return path
+	return []
 }
 
 export const bellmanFordSearch = async (src: Coords, dest: Coords, graph: Graph, withAnimation = true): Promise<Coords[]> => {
-	console.log(">>debug: bellman ford")
+	
 
 	validateCoords(src, graph.numberOfRows, graph.numberOfColumns)
 	validateCoords(dest, graph.numberOfRows, graph.numberOfColumns)
@@ -220,14 +203,8 @@ export const bellmanFordSearch = async (src: Coords, dest: Coords, graph: Graph,
 		}
 	}
 
-	const endNode = graph.nodes[dest.i][dest.j]
 
-	let path: Coords[] = []
-	let tmp = endNode
-	while (tmp) {
-		path.unshift(tmp.coords)
-		tmp = tmp.parent
-	}
+	const path = reconstructPath(graph.nodes[dest.i][dest.j])
 
 	if (!Coords.areEquals(path[0], src) || !Coords.areEquals(path[path.length - 1], dest)) path = [] //no path
 

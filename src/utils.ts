@@ -114,6 +114,19 @@ export const drawSearchingAnimation = async (coords: Coords) => {
 }
 
 /**
+ * Reconstructs the path from the destination node back to the start node.
+ */
+export const reconstructPath = (endNode: Node): Coords[] => {
+    const path: Coords[] = [];
+    let currentNode = endNode;
+    while (currentNode) {
+        path.unshift(currentNode.coords);
+        currentNode = currentNode.parent;
+    }
+    return path;
+}
+
+/**
  * Throws an error if the given coordinates are outside the grid boundaries.
  */
 export const validateCoords = (coords: Coords, gridNumRows: number, gridNumColumns: number) => {
