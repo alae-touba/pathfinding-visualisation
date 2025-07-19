@@ -60,7 +60,7 @@ const warningMessag = document.getElementById("warning-message")
 const themeToggle = document.getElementById('theme-toggle');
 
 // Grid Functions
-const buildGrid = () => {
+const renderGrid = () => {
     table.innerHTML = "";
     table.style.backgroundColor = GRID_BG_COLOR;
 
@@ -81,67 +81,102 @@ const buildGrid = () => {
 }
 
 // UI Functions
-const updateAlgoName = (algoName: string) => {
+const updateAlgoNameUI = (algoName: string) => {
 	chosenAlgorithm.textContent = algoName
 }
 
-const launchBootsrapModal = (message: string) => {
+const launchModal = (message: string) => {
 	warningMessag.textContent = message
 	;($('#exampleModal') as any).modal("show")
 }
 
 // Visualization
-const visualize = async (withAnimation = true) => {
-	if (appState.algorithm === Algorithm.None) {
-		launchBootsrapModal("you did not choose any algorithm!")
-	} else if (!appState.isStartNodeSelected || !appState.isEndNodeSelected) {
-		if (!appState.isStartNodeSelected && !appState.isEndNodeSelected) {
-			launchBootsrapModal("you did not select start and end nodes! both!")
-		} else if (!appState.isStartNodeSelected) {
-			launchBootsrapModal("you did not select the start node")
-		} else {
-			launchBootsrapModal("you did not select the end node")
-		}
-	} else {
-		if (!appState.firstTimeVisualization) {
-			for (let i = 0; i < appState.graph.numberOfRows; i++) {
-				for (let j = 0; j < appState.graph.numberOfColumns; j++) {
-					const htmlNode = document.getElementById(`${i},${j}`) as HTMLElement
-					if (htmlNode.style.backgroundColor === PATH_CELLS_BG_COLOR) htmlNode.style.backgroundColor = GRID_BG_COLOR
-					if (htmlNode.style.backgroundColor === SEARCHING_BG_COLOR) htmlNode.style.backgroundColor = GRID_BG_COLOR
-				}
-			}
-		}
+const getValidationState = (): { valid: boolean; message?: string } => {
+    if (appState.algorithm === Algorithm.None) {
+        return { valid: false, message: "you did not choose any algorithm!" };
+    }
+    if (!appState.isStartNodeSelected || !appState.isEndNodeSelected) {
+        if (!appState.isStartNodeSelected && !appState.isEndNodeSelected) {
+            return { valid: false, message: "you did not select start and end nodes! both!" };
+        } else if (!appState.isStartNodeSelected) {
+            return { valid: false, message: "you did not select the start node" };
+        } else {
+            return { valid: false, message: "you did not select the end node" };
+        }
+    }
+    return { valid: true };
+};
 
-		let path: Coords[] = null
+const validatePrerequisites = () => {
+    const { valid, message } = getValidationState();
+    if (!valid) {
+        launchModal(message);
+    }
+    return valid;
+};
 
-		const searchFunction = searchFunctionMap[appState.algorithm];
-		if (searchFunction) {
-			path = await searchFunction(appState.startNodeCoords, appState.endNodeCoords, appState.graph, withAnimation);
-		}
+const clearPreviousRun = () => {
+    for (let i = 0; i < appState.graph.numberOfRows; i++) {
+        for (let j = 0; j < appState.graph.numberOfColumns; j++) {
+            const htmlNode = document.getElementById(`${i},${j}`) as HTMLElement;
+            if (htmlNode.style.backgroundColor === PATH_CELLS_BG_COLOR) {
+                htmlNode.style.backgroundColor = GRID_BG_COLOR;
+            }
+            if (htmlNode.style.backgroundColor === SEARCHING_BG_COLOR) {
+                htmlNode.style.backgroundColor = GRID_BG_COLOR;
+            }
+        }
+    }
+};
 
-		if (path.length === 0) {	
-			alert("cannot go to dest, no path")
-		} else {
-			const sleepTime = withAnimation ? 50 : 0
-			for (let coords of path) {
-				const node = document.getElementById(Coords.getStrFromCoords(coords)) as HTMLElement
+const drawPath = async (path: Coords[], withAnimation: boolean) => {
+    const sleepTime = withAnimation ? 50 : 0;
+    for (const coords of path) {
+        const node = document.getElementById(Coords.getStrFromCoords(coords)) as HTMLElement;
+        node.style.backgroundColor = PATH_CELLS_BG_COLOR;
+        await sleep(sleepTime);
+    }
+};
 
-				node.style.backgroundColor = PATH_CELLS_BG_COLOR
-				await sleep(sleepTime)
-			}
-		}
+const resetGraphState = () => {
+    appState.graph.initGraph();
+    appState.graph.blockedNodesCoords.forEach((coords) => (appState.graph.nodes[coords.i][coords.j].isBlocked = true));
+};
 
-		appState.firstTimeVisualization = false
-		appState.graph.initGraph()
-		appState.graph.blockedNodesCoords.forEach((coords) => (appState.graph.nodes[coords.i][coords.j].isBlocked = true))
-	}
-}
+const visualize = async (withAnimation: boolean = true) => {
+    if (!validatePrerequisites()) {
+        return;
+    }
+
+    if (!appState.firstTimeVisualization) {
+        clearPreviousRun();
+    }
+
+    const searchFunction = searchFunctionMap[appState.algorithm];
+    if (!searchFunction) {
+        return;
+    }
+
+    const path = await searchFunction(appState.startNodeCoords, appState.endNodeCoords, appState.graph, withAnimation);
+
+    if (path.length === 0) {
+        alert("cannot go to dest, no path");
+    } else {
+        await drawPath(path, withAnimation);
+    }
+
+    appState.firstTimeVisualization = false;
+    resetGraphState();
+};
 
 // Event Listeners
 const selectAlgorithm = (algorithm: Algorithm) => {
     appState.algorithm = algorithm;
-    updateAlgoName(appState.algorithm);
+    updateAlgoNameUI(appState.algorithm);
+};
+
+const setSelectionMode = (mode: SelectionMode) => {
+	appState.selectionMode = mode;
 };
 
 btnSelectDijkstra.addEventListener("click", 
@@ -157,17 +192,15 @@ btnSelectBellmanFord.addEventListener("click",
 	() => selectAlgorithm(Algorithm.BellmanFord)
 );
 
-btnSelectStart.addEventListener("click", (e) => {
-	appState.selectionMode = SelectionMode.Start
-})
-
-btnSelectEnd.addEventListener("click", (e) => {
-	appState.selectionMode = SelectionMode.End
-})
-
-btnSelectBlocked.addEventListener("click", (e) => {
-	appState.selectionMode = SelectionMode.Blocked
-})
+btnSelectStart.addEventListener("click", 
+	() => setSelectionMode(SelectionMode.Start)
+);
+btnSelectEnd.addEventListener("click", 
+	() => setSelectionMode(SelectionMode.End)
+);
+btnSelectBlocked.addEventListener("click", 
+	() => setSelectionMode(SelectionMode.Blocked)
+);
 
 btnVisualize.addEventListener("click", async (e) => {
 	await visualize()
@@ -184,7 +217,7 @@ btnClearGrid.addEventListener("click", (e) => {
 
 	appState.graph = new Graph(GRID_NUM_ROWS, GRID_NUM_COLUMNS)
 
-	buildGrid()
+	renderGrid()
 	appState.graph.initGraph()
 
 	appState.isStartNodeSelected = false
@@ -347,7 +380,7 @@ themeToggle.addEventListener('click', () => {
 });
 
 // Initialization
-buildGrid()
+renderGrid()
 appState.graph.initGraph()
 const width = (document.getElementById("0,0") as HTMLElement).style.width
 const height = (document.getElementById("0,0") as HTMLElement).style.height
