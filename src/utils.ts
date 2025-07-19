@@ -134,6 +134,13 @@ export enum Algorithm {
     None = ""
 }
 
+export enum SelectionMode {
+    Start = "start",
+    End = "end",
+    Blocked = "blocked",
+    None = ""
+}
+
 /**
  * Throws an error if the given coordinates are outside the grid boundaries.
  */

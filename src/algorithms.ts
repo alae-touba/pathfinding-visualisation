@@ -204,7 +204,7 @@ export const bellmanFordSearch = async (src: Coords, dest: Coords, graph: Graph,
 	}
 
 
-	const path = reconstructPath(graph.nodes[dest.i][dest.j])
+	let path = reconstructPath(graph.nodes[dest.i][dest.j])
 
 	if (!Coords.areEquals(path[0], src) || !Coords.areEquals(path[path.length - 1], dest)) path = [] //no path
 
