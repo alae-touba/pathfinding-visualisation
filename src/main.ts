@@ -58,6 +58,8 @@ const btnSelectDfs = document.getElementById("btn-select-dfs")
 const btnSelectBellmanFord = document.getElementById("btn-select-bellman-ford")
 const warningMessag = document.getElementById("warning-message")
 const themeToggle = document.getElementById('theme-toggle');
+let width: string;
+let height: string;
 
 // Grid Functions
 const renderGrid = () => {
@@ -371,16 +373,22 @@ table.addEventListener("mouseover", (e) => {
 	}
 })
 
-themeToggle.addEventListener('click', () => {
-	const html = document.documentElement;
+const handleThemeToggle = () => {
+    const html = document.documentElement;
     const currentTheme = html.getAttribute('data-theme');
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
     html.setAttribute('data-theme', newTheme);
     themeToggle.innerHTML = `<i class="fas fa-${newTheme === 'light' ? 'moon' : 'sun'}"></i>`;
-});
+};
+
+themeToggle.addEventListener('click', handleThemeToggle);
 
 // Initialization
-renderGrid()
-appState.graph.initGraph()
-const width = (document.getElementById("0,0") as HTMLElement).style.width
-const height = (document.getElementById("0,0") as HTMLElement).style.height
+const init = () => {
+    renderGrid();
+    appState.graph.initGraph();
+    width = (document.getElementById("0,0") as HTMLElement).style.width;
+    height = (document.getElementById("0,0") as HTMLElement).style.height;
+};
+
+init();
