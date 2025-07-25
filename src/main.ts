@@ -72,7 +72,7 @@ const renderGrid = () => {
         const tr = document.createElement("tr");
         for (let j = 0; j < appState.graph.numberOfColumns; j++) {
             const td = document.createElement("td");
-            td.id = `${i},${j}`;
+            td.dataset.coords = `${i},${j}`;
             td.style.borderColor = CELLS_BORDER_COLOR;
             tr.appendChild(td);
         }
@@ -93,24 +93,33 @@ const launchModal = (message: string) => {
 }
 
 // Visualization
-const getValidationState = (): { valid: boolean; message?: string } => {
-    if (appState.algorithm === Algorithm.None) {
+const isSearchAlgoChosen = (): boolean => {
+    return appState.algorithm !== Algorithm.None;
+};
+
+const checkSearchReadiness = (): { valid: boolean; message?: string } => {
+    if (!isSearchAlgoChosen()) {
         return { valid: false, message: "you did not choose any algorithm!" };
     }
-    if (!appState.isStartNodeSelected || !appState.isEndNodeSelected) {
-        if (!appState.isStartNodeSelected && !appState.isEndNodeSelected) {
-            return { valid: false, message: "you did not select start and end nodes! both!" };
-        } else if (!appState.isStartNodeSelected) {
-            return { valid: false, message: "you did not select the start node" };
-        } else {
-            return { valid: false, message: "you did not select the end node" };
-        }
+
+    const startNodeMissing = !appState.isStartNodeSelected;
+    const endNodeMissing = !appState.isEndNodeSelected;
+
+    if (startNodeMissing && endNodeMissing) {
+        return { valid: false, message: "you did not select start and end nodes! both!" };
     }
+    if (startNodeMissing) {
+        return { valid: false, message: "you did not select the start node" };
+    }
+    if (endNodeMissing) {
+        return { valid: false, message: "you did not select the end node" };
+    }
+
     return { valid: true };
 };
 
-const validatePrerequisites = () => {
-    const { valid, message } = getValidationState();
+const handleSearchValidation = () => {
+    const { valid, message } = checkSearchReadiness();
     if (!valid) {
         launchModal(message);
     }
@@ -120,7 +129,7 @@ const validatePrerequisites = () => {
 const clearPreviousRun = () => {
     for (let i = 0; i < appState.graph.numberOfRows; i++) {
         for (let j = 0; j < appState.graph.numberOfColumns; j++) {
-            const htmlNode = document.getElementById(`${i},${j}`) as HTMLElement;
+            const htmlNode = document.querySelector(`[data-coords="${i},${j}"]`) as HTMLElement;
             if (htmlNode.style.backgroundColor === PATH_CELLS_BG_COLOR) {
                 htmlNode.style.backgroundColor = GRID_BG_COLOR;
             }
@@ -134,7 +143,7 @@ const clearPreviousRun = () => {
 const drawPath = async (path: Coords[], withAnimation: boolean) => {
     const sleepTime = withAnimation ? 50 : 0;
     for (const coords of path) {
-        const node = document.getElementById(Coords.getStrFromCoords(coords)) as HTMLElement;
+        const node = document.querySelector(`[data-coords="${Coords.getStrFromCoords(coords)}"]`) as HTMLElement;
         node.style.backgroundColor = PATH_CELLS_BG_COLOR;
         await sleep(sleepTime);
     }
@@ -146,7 +155,7 @@ const resetGraphState = () => {
 };
 
 const visualize = async (withAnimation: boolean = true) => {
-    if (!validatePrerequisites()) {
+    if (!handleSearchValidation()) {
         return;
     }
 
@@ -243,13 +252,13 @@ table.addEventListener("click", (e: MouseEvent) => {
 				<img src="static/images/start-16.png" style="display:block; margin-left: auto; margin-right: auto; margin-top: 3px;"></img>
 			`
 			appState.isStartNodeSelected = true
-			appState.startNodeCoords = Coords.getCoordsFromStr(target.id)
+			appState.startNodeCoords = Coords.getCoordsFromStr(target.dataset.coords)
 		} else {
 			//if we clicked on a image
 			if (target.tagName === "IMG") {
 				const imgParent = target.parentElement //td
 				// if it is the start node img
-				if (Coords.areEquals(Coords.getCoordsFromStr(imgParent.id), appState.startNodeCoords)) {
+				if (Coords.areEquals(Coords.getCoordsFromStr(imgParent.dataset.coords), appState.startNodeCoords)) {
 					imgParent.innerHTML = ""
 					imgParent.style.backgroundColor = GRID_BG_COLOR
 
@@ -258,14 +267,14 @@ table.addEventListener("click", (e: MouseEvent) => {
 				}
 			} else {
 				//we clicked on the start node cell => remove it
-				if (Coords.areEquals(Coords.getCoordsFromStr(target.id), appState.startNodeCoords)) {
+				if (Coords.areEquals(Coords.getCoordsFromStr(target.dataset.coords), appState.startNodeCoords)) {
 					target.innerHTML = ""
 					target.style.backgroundColor = GRID_BG_COLOR
 					appState.isStartNodeSelected = false
 					appState.startNodeCoords = null
 				} else {
 					//put the start node on the clicked option only if the latter is not the end node cell
-					if (!appState.isEndNodeSelected || (appState.isEndNodeSelected && !Coords.areEquals(appState.endNodeCoords, Coords.getCoordsFromStr(target.id)))) {
+					if (!appState.isEndNodeSelected || (appState.isEndNodeSelected && !Coords.areEquals(appState.endNodeCoords, Coords.getCoordsFromStr(target.dataset.coords)))) {
 						const oldStartNode = document.getElementById(Coords.getStrFromCoords(appState.startNodeCoords)) as HTMLElement
 						oldStartNode.style.backgroundColor = GRID_BG_COLOR
 						oldStartNode.innerHTML = ""
@@ -274,7 +283,7 @@ table.addEventListener("click", (e: MouseEvent) => {
 						target.innerHTML = `
 							<img src="static/images/start-16.png" style="display:block; margin-left: auto; margin-right: auto; margin-top: 3px;"></img>
 							`
-						appState.startNodeCoords = Coords.getCoordsFromStr(target.id)
+						appState.startNodeCoords = Coords.getCoordsFromStr(target.dataset.coords)
 					}
 				}
 			}
@@ -291,27 +300,27 @@ table.addEventListener("click", (e: MouseEvent) => {
 				<img src="static/images/finish-16.png" style="display:block; margin-left: auto; margin-right: auto; margin-top: 3px;"></img>
 			`
 			appState.isEndNodeSelected = true
-			appState.endNodeCoords = Coords.getCoordsFromStr(target.id)
+			appState.endNodeCoords = Coords.getCoordsFromStr(target.dataset.coords)
 		} else {
 			//if we clicked on a image
 			if (target.tagName === "IMG") {
 				const imgParent = target.parentElement //td
 				// if it is the end node img
-				if (Coords.areEquals(Coords.getCoordsFromStr(imgParent.id), appState.endNodeCoords)) {
+				if (Coords.areEquals(Coords.getCoordsFromStr(imgParent.dataset.coords), appState.endNodeCoords)) {
 					imgParent.innerHTML = ""
 					imgParent.style.backgroundColor = GRID_BG_COLOR
 					appState.isEndNodeSelected = false
 					appState.endNodeCoords = null
 				}
 			} else {
-				if (Coords.areEquals(Coords.getCoordsFromStr(target.id), appState.endNodeCoords)) {
+				if (Coords.areEquals(Coords.getCoordsFromStr(target.dataset.coords), appState.endNodeCoords)) {
 					target.innerHTML = ""
 					target.style.backgroundColor = GRID_BG_COLOR
 					appState.isEndNodeSelected = false
 					appState.endNodeCoords = null
 				} else {
 					//put the end node in the selected target only if the latter is not a start cell
-					if (!appState.isStartNodeSelected || (appState.isStartNodeSelected && !Coords.areEquals(appState.startNodeCoords, Coords.getCoordsFromStr(target.id)))) {
+					if (!appState.isStartNodeSelected || (appState.isStartNodeSelected && !Coords.areEquals(appState.startNodeCoords, Coords.getCoordsFromStr(target.dataset.coords)))) {
 						const oldEndNode = document.getElementById(Coords.getStrFromCoords(appState.endNodeCoords)) as HTMLElement
 						oldEndNode.style.backgroundColor = GRID_BG_COLOR
 						oldEndNode.innerHTML = ""
@@ -320,7 +329,7 @@ table.addEventListener("click", (e: MouseEvent) => {
 						target.innerHTML = `
 							<img src="static/images/finish-16.png" style="display:block; margin-left: auto; margin-right: auto; margin-top: 3px;"></img>
 							`
-						appState.endNodeCoords = Coords.getCoordsFromStr(target.id)
+						appState.endNodeCoords = Coords.getCoordsFromStr(target.dataset.coords)
 					}
 				}
 			}
@@ -348,10 +357,10 @@ table.addEventListener("mouseover", (e) => {
 		if (
 			target.tagName !== "IMG" &&
 			target.tagName !== "TABLE" &&
-			(!appState.isStartNodeSelected || (appState.isStartNodeSelected && !Coords.areEquals(Coords.getCoordsFromStr(target.id), appState.startNodeCoords))) &&
-			(!appState.isEndNodeSelected || (appState.isEndNodeSelected && !Coords.areEquals(Coords.getCoordsFromStr(target.id), appState.endNodeCoords)))
+			(!appState.isStartNodeSelected || (appState.isStartNodeSelected && !Coords.areEquals(Coords.getCoordsFromStr(target.dataset.coords), appState.startNodeCoords))) &&
+			(!appState.isEndNodeSelected || (appState.isEndNodeSelected && !Coords.areEquals(Coords.getCoordsFromStr(target.dataset.coords), appState.endNodeCoords)))
 		) {
-			const coords = Coords.getCoordsFromStr(target.id)
+			const coords = Coords.getCoordsFromStr(target.dataset.coords)
 
 			if (target.style.backgroundColor === GRID_BG_COLOR || target.style.backgroundColor.length === 0) {
 				target.style.backgroundColor = BLOCKED_CELLS_BG_COLOR
@@ -387,8 +396,8 @@ themeToggle.addEventListener('click', handleThemeToggle);
 const init = () => {
     renderGrid();
     appState.graph.initGraph();
-    width = (document.getElementById("0,0") as HTMLElement).style.width;
-    height = (document.getElementById("0,0") as HTMLElement).style.height;
+    width = (document.querySelector(`[data-coords="0,0"]`) as HTMLElement).style.width;
+    height = (document.querySelector(`[data-coords="0,0"]`) as HTMLElement).style.height;
 };
 
 init();

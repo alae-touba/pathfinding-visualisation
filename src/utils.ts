@@ -108,7 +108,7 @@ export function sleep(ms: number) {
 }
 
 export const drawSearchingAnimation = async (coords: Coords) => {
-	const cell = document.getElementById(Coords.getStrFromCoords(coords)) as HTMLElement
+	const cell = document.querySelector(`[data-coords="${Coords.getStrFromCoords(coords)}"]`) as HTMLElement
 	cell.style.backgroundColor = SEARCHING_BG_COLOR
 	await sleep(30)
 }
