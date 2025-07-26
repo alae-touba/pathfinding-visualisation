@@ -29,7 +29,7 @@ table {
     border-collapse: collapse;
     margin: 0 auto;
 }
-td {
+.grid-cell {
     width: 20px;
     height: 20px;
     border: 1px solid var(--border-color);

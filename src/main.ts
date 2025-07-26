@@ -60,8 +60,6 @@ const DOM = {
 	warningMessageContainer: document.getElementById("warning-message")!,
 	themeToggleButton: document.getElementById("theme-toggle")!,
   };
-let width: string;
-let height: string;
 
 // Grid Functions
 const renderGrid = () => {
@@ -74,6 +72,7 @@ const renderGrid = () => {
         const tr = document.createElement("tr");
         for (let j = 0; j < appState.graph.numberOfColumns; j++) {
             const td = document.createElement("td");
+			td.classList.add('grid-cell');
             td.dataset.coords = `${i},${j}`;
             td.style.borderColor = CELLS_BORDER_COLOR;
             tr.appendChild(td);
@@ -293,8 +292,6 @@ DOM.gridTable.addEventListener("click", (e: MouseEvent) => {
 		appState.selectionMode = null
 
 		target.style.padding = "0px"
-		target.style.width = width
-		target.style.height = height
 	} else if (appState.selectionMode === SelectionMode.End) {
 		if (!appState.isEndNodeSelected) {
 			target.style.backgroundColor = END_CELL_BG_COLOR
@@ -339,8 +336,6 @@ DOM.gridTable.addEventListener("click", (e: MouseEvent) => {
 		appState.selectionMode = null
 
 		target.style.padding = "0px"
-		target.style.width = width
-		target.style.height = height
 	} else if (appState.selectionMode === SelectionMode.Blocked) {
 		appState.selectingBlocked = !appState.selectingBlocked
 
@@ -398,8 +393,6 @@ DOM.themeToggleButton.addEventListener('click', handleThemeToggle);
 const init = () => {
     renderGrid();
     appState.graph.initGraph();
-    width = (document.querySelector(`[data-coords="0,0"]`) as HTMLElement).style.width;
-    height = (document.querySelector(`[data-coords="0,0"]`) as HTMLElement).style.height;
 };
 
 init();
