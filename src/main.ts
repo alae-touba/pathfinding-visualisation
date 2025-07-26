@@ -23,7 +23,7 @@ import { dfsSearch, bfsSearch, dijkstraSearch, bellmanFordSearch } from "./algor
 const GRID_NUM_ROWS = 25;
 const GRID_NUM_COLUMNS = 50;
 
-const searchFunctionMap = {
+const SEARCH_FUNCTION_MAP = {
 	[Algorithm.Dijkstra]: dijkstraSearch,
 	[Algorithm.BellmanFord]: bellmanFordSearch,
 	[Algorithm.Bfs]: bfsSearch,
@@ -44,27 +44,29 @@ const appState = {
 };
 
 // DOM Elements
-const table = document.querySelector("table")
-const btnSelectStart = document.getElementById("btn-select-start")
-const btnSelectEnd = document.getElementById("btn-select-end")
-const btnSelectBlocked = document.getElementById("btn-select-blocked")
-const btnVisualize = document.getElementById("btn-visualize")
-const btnSeePathOnly = document.getElementById("btn-see-path-only")
-const btnClearGrid = document.getElementById("btn-clear-grid")
-const chosenAlgorithm = document.getElementById("chosen-algorithm")
-const btnSelectDijkstra = document.getElementById("btn-select-dijkstra")
-const btnSelectBfs = document.getElementById("btn-select-bfs")
-const btnSelectDfs = document.getElementById("btn-select-dfs")
-const btnSelectBellmanFord = document.getElementById("btn-select-bellman-ford")
-const warningMessag = document.getElementById("warning-message")
-const themeToggle = document.getElementById('theme-toggle');
+const DOM = {
+	gridTable: document.getElementById("grid-table")!,
+	selectStartButton: document.getElementById("btn-select-start")!,
+	selectEndButton: document.getElementById("btn-select-end")!,
+	selectBlockedButton: document.getElementById("btn-select-blocked")!,
+	visualizeButton: document.getElementById("btn-visualize")!,
+	seePathOnlyButton: document.getElementById("btn-see-path-only")!,
+	clearGridButton: document.getElementById("btn-clear-grid")!,
+	chosenAlgorithmDisplay: document.getElementById("chosen-algorithm")!,
+	selectDijkstraButton: document.getElementById("btn-select-dijkstra")!,
+	selectBfsButton: document.getElementById("btn-select-bfs")!,
+	selectDfsButton: document.getElementById("btn-select-dfs")!,
+	selectBellmanFordButton: document.getElementById("btn-select-bellman-ford")!,
+	warningMessageContainer: document.getElementById("warning-message")!,
+	themeToggleButton: document.getElementById("theme-toggle")!,
+  };
 let width: string;
 let height: string;
 
 // Grid Functions
 const renderGrid = () => {
-    table.innerHTML = "";
-    table.style.backgroundColor = GRID_BG_COLOR;
+    DOM.gridTable.innerHTML = "";
+    DOM.gridTable.style.backgroundColor = GRID_BG_COLOR;
 
     const fragment = document.createDocumentFragment();
 
@@ -79,16 +81,16 @@ const renderGrid = () => {
         fragment.appendChild(tr);
     }
 
-    table.appendChild(fragment);
+    DOM.gridTable.appendChild(fragment);
 }
 
 // UI Functions
-const updateAlgoNameUI = (algoName: string) => {
-	chosenAlgorithm.textContent = algoName
+const updateAlgorithmNameUI = (algoName: string) => {
+	DOM.chosenAlgorithmDisplay.textContent = algoName
 }
 
 const launchModal = (message: string) => {
-	warningMessag.textContent = message
+	DOM.warningMessageContainer.textContent = message
 	;($('#exampleModal') as any).modal("show")
 }
 
@@ -163,7 +165,7 @@ const visualize = async (withAnimation: boolean = true) => {
         clearPreviousRun();
     }
 
-    const searchFunction = searchFunctionMap[appState.algorithm];
+    const searchFunction = SEARCH_FUNCTION_MAP[appState.algorithm];
     if (!searchFunction) {
         return;
     }
@@ -183,45 +185,45 @@ const visualize = async (withAnimation: boolean = true) => {
 // Event Listeners
 const selectAlgorithm = (algorithm: Algorithm) => {
     appState.algorithm = algorithm;
-    updateAlgoNameUI(appState.algorithm);
+    updateAlgorithmNameUI(appState.algorithm);
 };
 
 const setSelectionMode = (mode: SelectionMode) => {
 	appState.selectionMode = mode;
 };
 
-btnSelectDijkstra.addEventListener("click", 
+DOM.selectDijkstraButton.addEventListener("click", 
 	() => selectAlgorithm(Algorithm.Dijkstra)
 );
-btnSelectBfs.addEventListener("click", 
+DOM.selectBfsButton.addEventListener("click", 
 	() => selectAlgorithm(Algorithm.Bfs)
 );
-btnSelectDfs.addEventListener("click", 
+DOM.selectDfsButton.addEventListener("click", 
 	() => selectAlgorithm(Algorithm.Dfs)
 );
-btnSelectBellmanFord.addEventListener("click", 
+DOM.selectBellmanFordButton.addEventListener("click", 
 	() => selectAlgorithm(Algorithm.BellmanFord)
 );
 
-btnSelectStart.addEventListener("click", 
+DOM.selectStartButton.addEventListener("click", 
 	() => setSelectionMode(SelectionMode.Start)
 );
-btnSelectEnd.addEventListener("click", 
+DOM.selectEndButton.addEventListener("click", 
 	() => setSelectionMode(SelectionMode.End)
 );
-btnSelectBlocked.addEventListener("click", 
+DOM.selectBlockedButton.addEventListener("click", 
 	() => setSelectionMode(SelectionMode.Blocked)
 );
 
-btnVisualize.addEventListener("click", async (e) => {
+DOM.visualizeButton.addEventListener("click", async (e) => {
 	await visualize()
 })
 
-btnSeePathOnly.addEventListener("click", async (e) => {
+DOM.seePathOnlyButton.addEventListener("click", async (e) => {
 	await visualize(false)
 })
 
-btnClearGrid.addEventListener("click", (e) => {
+DOM.clearGridButton.addEventListener("click", (e) => {
 	appState.firstTimeVisualization = true
 
 	selectAlgorithm(Algorithm.None)
@@ -242,7 +244,7 @@ btnClearGrid.addEventListener("click", (e) => {
 })
 
 
-table.addEventListener("click", (e: MouseEvent) => {
+DOM.gridTable.addEventListener("click", (e: MouseEvent) => {
 	const target = e.target as HTMLElement
 
 	if (appState.selectionMode === SelectionMode.Start) {
@@ -350,7 +352,7 @@ table.addEventListener("click", (e: MouseEvent) => {
 	}
 })
 
-table.addEventListener("mouseover", (e) => {
+DOM.gridTable.addEventListener("mouseover", (e) => {
 	const target = e.target as HTMLElement
 
 	if (appState.selectingBlocked) {
@@ -387,10 +389,10 @@ const handleThemeToggle = () => {
     const currentTheme = html.getAttribute('data-theme');
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
     html.setAttribute('data-theme', newTheme);
-    themeToggle.innerHTML = `<i class="fas fa-${newTheme === 'light' ? 'moon' : 'sun'}"></i>`;
+    DOM.themeToggleButton.innerHTML = `<i class="fas fa-${newTheme === 'light' ? 'moon' : 'sun'}"></i>`;
 };
 
-themeToggle.addEventListener('click', handleThemeToggle);
+DOM.themeToggleButton.addEventListener('click', handleThemeToggle);
 
 // Initialization
 const init = () => {
